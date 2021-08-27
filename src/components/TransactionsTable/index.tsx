@@ -1,6 +1,13 @@
+import { format } from "date-fns";
+
+import { formatPrice } from "utils/format";
+
 import { Container } from "./styles";
+import { useTransaction } from "hooks/useTransactions";
 
 export function TransactionsTable() {
+  const { transactions } = useTransaction();
+
   return (
     <Container>
       <table>
@@ -14,30 +21,16 @@ export function TransactionsTable() {
         </thead>
 
         <tbody>
-          <tr>
-            <td>Desenvolvimento de website</td>
-            <td className="deposit">R$ 12000,00</td>
-            <td>Entrada</td>
-            <td>15/01/2021</td>
-          </tr>
-          <tr>
-            <td>Desenvolvimento de website</td>
-            <td>R$ 12000,00</td>
-            <td>Entrada</td>
-            <td>15/01/2021</td>
-          </tr>
-          <tr>
-            <td>Desenvolvimento de website</td>
-            <td className="withdraw">- R$ 12000,00</td>
-            <td>Entrada</td>
-            <td>15/01/2021</td>
-          </tr>
-          <tr>
-            <td>Desenvolvimento de website</td>
-            <td>R$ 12000,00</td>
-            <td>Entrada</td>
-            <td>15/01/2021</td>
-          </tr>
+          {transactions.map((transaction) => (
+            <tr key={transaction.id}>
+              <td>{transaction.title}</td>
+              <td className={transaction.type}>
+                {formatPrice(transaction.amount)}
+              </td>
+              <td>{transaction.category}</td>
+              <td>{format(new Date(transaction.createdAt), "dd/MM/yyyy")}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </Container>
